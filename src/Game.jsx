@@ -46,7 +46,7 @@ export default function Game() {
   const stopGame = () => {
     clearInterval(intervalRef.current);
     setIsActive(false);
-    setTimeout(() => setMessage(""), 2000);
+    // setTimeout(() => setMessage(""), 2000);
   };
 
   const newQuestion = () => {
