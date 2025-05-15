@@ -87,29 +87,28 @@ export default function Game() {
   };
 
   return (
-  <div className="container">
-    {/* <p className="message">{message}</p> */}
-    <div className={`game-area ${!isActive ? "hidden" : ""}`}>
-      <div className="boxes-container">
-        {boxes.map((b, i) => (
-          <Box key={i} shape={shapeClasses[b]} level={level} />
-        ))}
+    <div className="container">
+      {/* <p className="message">{message}</p> */}
+      <div className={`game-area ${!isActive ? "hidden" : ""}`}>
+        <div className="boxes-container">
+          {boxes.map((b, i) => (
+            <Box key={i} shape={shapeClasses[b]} level={level} />
+          ))}
+        </div>
+        <button className="btn-catch" onClick={handleCatchClick}>
+          תפוס
+        </button>
       </div>
-      <button className="btn-catch" onClick={handleCatchClick}>
-        תפוס
-      </button>
-    </div>
 
-    <div className="controls">
-      <button className={`btn-start ${isActive ? "hidden" : ""}`} onClick={startGame}>
-        התחל
-      </button>
-      <div className="stats">
-        <p>נקודות: {points}</p>
-        <p>שלב: {level}</p>
+      <div className="controls">
+        <button className={`btn-start ${isActive ? "hidden" : ""}`} onClick={startGame}>
+          התחל
+        </button>
+        <div className="stats">
+          <p>נקודות: {points}</p>
+          <p>שלב: {level}</p>
+        </div>
       </div>
     </div>
-  </div>
-);
-
+  );
 }
