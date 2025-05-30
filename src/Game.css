@@ -1,86 +1,153 @@
-.triangle {
-    width: 0;
-    height: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    border-bottom: 100px solid #f9b728;
-    position: relative;
-}
-
-.square {
-    width: 100px;
-    height: 100px;
-    background-color: #f9b728;
-    position: relative;
-}
-
-.circle {
-    width: 100px;
-    height: 100px;
-    background-color: #f9b728;
-    border-radius: 50%;
-    position: relative;
+/* === GENERAL === */
+body {
+  margin: 0;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: linear-gradient(to bottom, #eff8ff, #2bbce4);
-    padding: 20px;
-    font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #eff8ff, #2bbce4);
+  font-family: sans-serif;
+  position: relative;
 }
 
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* === HEADER === */
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.timer-bar {
+  width: 50%;
+  height: 20px;
+  border: black 2px solid;
+  border-radius: 15px;
+  padding: 2px;
+}
+
+.timer-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, #ff71d2, #f9b728);
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+/* === GAME AREA === */
 .game-area {
-    background-color: white;
-    padding: 24px;
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    width: 40rem;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  background-color: white;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  min-height: 16rem;
 }
 
 .boxes-container {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 16px;
 }
 
+.box {
+  width: 8rem;
+  height: 8rem;
+  border: 2px solid #fd60cc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* === SHAPES === */
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 100px solid #f9b728;
+  position: relative;
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  background-color: #f9b728;
+  position: relative;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  background-color: #f9b728;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* === CONTROLS === */
 .controls {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .btn-catch,
 .btn-start {
-    font-size: 30px;
-    background-color: #43ac74;
-    color: white;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  font-size: 30px;
+  background-color: #43ac74;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.btn-catch:hover{
-    background-color: #2f855a;
+.btn-catch:hover {
+  background-color: #2f855a;
 }
 
 .btn-start {
-    background-color: #ff71d2;
-    margin-top: 10px;
+  background-color: #ff71d2;
+  margin-top: 10px;
 }
 
 .btn-start:hover {
-    background-color: #df7abf;
+  background-color: #df7abf;
 }
 
 button:active {
@@ -88,34 +155,49 @@ button:active {
 }
 
 .stats {
-    text-align: center;
-    font-size: 18px;
-    color: #333;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
 }
 
-.box{
-    flex: 1;
-    width: 8rem;
-    height: 8rem;
-    border: 2px solid #fd60cc;
+/* === RESULTS BAR === */
+.results {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  width: 100%;
+  padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  box-sizing: border-box;
+
+  overflow-x: auto; /* 👈 מאפשר גלילה אופקית */
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+h2 {
+  font-weight: bold;
+  margin: 0 1rem 0 0;
+  align-self: flex-end;
+}
+
+.result-bar {
+  width: 2rem;
+  background-color: #f9b728;
+  display: inline-block;
+  transition: height 0.3s ease;
+}
+
+.timer-container{
+    width: 100%;
+}
+
+.btns{
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.hidden {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.game-area, .btn-start {
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.message {
-  font-size: 24px;
-  color: #333;
-  margin-top: 20px;
-  height: 50px;
+    gap: 10px;
+    direction: rtl;
 }

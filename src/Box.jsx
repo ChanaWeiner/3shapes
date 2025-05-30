@@ -1,10 +1,12 @@
 import "./Box.css";
 const shapeClasses = ["square", "circle", "triangle"];
-export default function Box({ shape, level }){
+export default function Box({ shape }) {
+  const confusingShape = shapeClasses.filter(s => s !== shape)[Math.floor(Math.random() * 2)];
+
   return (
     <div className="box">
       <div className={shape}>
-        {level === 2 && <div className={`confuse-${shapeClasses[Math.floor(Math.random()*shapeClasses.length)]}`}></div>}
+        <div className={`confusing-shape ${confusingShape}`}></div>
       </div>
     </div>
   );

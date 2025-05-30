@@ -1,9 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Game.css";
 import Box from "./Box";
-
+import Timer from "./Timer";
+import Results from "./Results";
 const shapeClasses = ["square", "circle", "triangle"];
-const TIME_INTERVAL = 1500;
+const TIME_INTERVAL = 1000;
+const GAME_DURATION = 10000;
 
 const getRandomShapes = (allowDuplicates = true) => {
   if (allowDuplicates) {
@@ -29,24 +31,29 @@ export default function Game() {
   const [isActive, setIsActive] = useState(false);
   const [boxes, setBoxes] = useState([]);
   const [points, setPoints] = useState(0);
-  const [level, setLevel] = useState(1);
-  // const [message, setMessage] = useState("");
+  const [timer, setTimer] = useState(GAME_DURATION);
+  const [gameResults, setGameResults] = useState(localStorage.getItem('gameResults') ? JSON.parse(localStorage.getItem('gameResults')) : []);
 
   const clickedRef = useRef(false);
   const hasToClickRef = useRef(false);
   const intervalRef = useRef(null);
 
+
+
   const startGame = () => {
     setPoints(0);
     setIsActive(true);
     newQuestion();
-    intervalRef.current = setInterval(nextQuestion, TIME_INTERVAL);
+    setTimer(GAME_DURATION);
+    intervalRef.current = setInterval(() => setTimer(timer => timer - TIME_INTERVAL), TIME_INTERVAL);
+    // setTimeout(stopGame, GAME_DURATION);
   };
 
   const stopGame = () => {
     clearInterval(intervalRef.current);
     setIsActive(false);
-    // setTimeout(() => setMessage(""), 2000);
+    setGameResults(prevPoints => [...prevPoints, points]);
+    localStorage.setItem('gameResults', JSON.stringify([...gameResults, points]));
   };
 
   const newQuestion = () => {
@@ -54,61 +61,82 @@ export default function Game() {
     const newBoxes = getRandomShapes(Math.random() > 0.5);
     setBoxes(newBoxes);
     hasToClickRef.current = allDifferent(newBoxes);
-    // setMessage(hasToClickRef.current ? "לחץ על הכפתור" : "אל תלחץ על הכפתור");
   };
 
-  const nextQuestion = () => {
-    if (hasToClickRef.current && !clickedRef.current) {
-      // setMessage("לא לחצת בזמן, המשחק נגמר!");
-      stopGame();
-    } else {
-      newQuestion();
+  const handleRightClick = () => {
+    if (hasToClickRef.current) {
+      setPoints(prev => prev + 1);
     }
+    else {
+      setPoints(prev => prev - 1);
+    }
+
+    newQuestion();
   };
 
-  const handleCatchClick = () => {
+  const handleLeftClick = () => {
     if (!hasToClickRef.current) {
-      // setMessage("לא היית אמור ללחוץ, המשחק נגמר!");
+      setPoints(prev => prev + 1);
+    }
+    else {
+      setPoints(prev => prev-1<0?0:prev - 1);
+    }
+
+    newQuestion();
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isActive) return;
+      if (e.key === "ArrowRight") {
+        handleRightClick();
+      } else if (e.key === "ArrowLeft") {
+        handleLeftClick();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isActive]);
+
+  useEffect(() => {
+    if (timer <= 0 && isActive) {
       stopGame();
-      return;
     }
+  }, [timer]);
 
-    clickedRef.current = true;
-    const newPoints = points + 1;
-    setPoints(newPoints);
-    // setMessage("לחצת נכון!");
-
-    if (newPoints === 5) {
-      clearInterval(intervalRef.current);
-      setLevel((l) => l + 1);
-      alert("עברת שלב! לחץ OK כדי להמשיך.");
-      startGame();
-    }
-  };
 
   return (
     <div className="container">
-      {/* <p className="message">{message}</p> */}
-      <div className={`game-area ${!isActive ? "hidden" : ""}`}>
-        <div className="boxes-container">
-          {boxes.map((b, i) => (
-            <Box key={i} shape={shapeClasses[b]} level={level} />
-          ))}
-        </div>
-        <button className="btn-catch" onClick={handleCatchClick}>
-          תפוס
-        </button>
-      </div>
+  <header>
+    <h1 className="title">תפוס את הצורה</h1>
+  </header>
+  
+  <div className="stats">
+    <p>נקודות: {points}</p>
+  </div>
 
-      <div className="controls">
-        <button className={`btn-start ${isActive ? "hidden" : ""}`} onClick={startGame}>
-          התחל
-        </button>
-        <div className="stats">
-          <p>נקודות: {points}</p>
-          <p>שלב: {level}</p>
-        </div>
+  {isActive && (
+    <main className="game-area">
+      <Timer timer={timer} GAME_DURATION={GAME_DURATION} />
+      <div className="boxes-container">
+        {boxes.map((b, i) => (
+          <Box key={i} shape={shapeClasses[b]} />
+        ))}
       </div>
-    </div>
+      <div className="btns">
+        <button className="btn-catch" onClick={handleRightClick}>כן</button>
+        <button className="btn-catch" onClick={handleLeftClick}>לא</button>
+      </div>
+    </main>
+  )}
+
+  {!isActive && (
+    <button className="btn-start" onClick={startGame}>התחל</button>
+  )}
+
+
+  <Results gameResults={gameResults}/>
+</div>
+
   );
 }
