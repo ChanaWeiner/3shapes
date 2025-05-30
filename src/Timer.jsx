@@ -1,4 +1,26 @@
-export default function Timer({ timer,GAME_DURATION }) {
+import { useEffect, useState, useRef } from "react";
+const GAME_DURATION = 10000; // 10 seconds
+const TIME_INTERVAL= 1000; // 1 second
+export default function Timer({ timerKey, onFinish }) {
+    const [timer, setTimer] = useState(GAME_DURATION);
+    const intervalRef = useRef(null);
+
+    useEffect(() => {
+        setTimer(GAME_DURATION);
+        intervalRef.current = setInterval(() => {
+            setTimer((prev) => prev - TIME_INTERVAL);
+        }, 1000);
+
+        return () => clearInterval(intervalRef.current);
+    }, [timerKey]);
+
+    useEffect(() => {
+        if (timer <= 0) {
+            clearInterval(intervalRef.current);
+            onFinish();
+        }
+    }, [timer, onFinish]);
+
     const convertToTime = (timeMs) => {
         const totalSeconds = Math.floor(timeMs / 1000);
         const minutes = Math.floor(totalSeconds / 60);

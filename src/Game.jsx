@@ -31,21 +31,19 @@ export default function Game() {
   const [isActive, setIsActive] = useState(false);
   const [boxes, setBoxes] = useState([]);
   const [points, setPoints] = useState(0);
-  const [timer, setTimer] = useState(GAME_DURATION);
+  const [timerKey, setTimerKey] = useState(0);
   const [gameResults, setGameResults] = useState(localStorage.getItem('gameResults') ? JSON.parse(localStorage.getItem('gameResults')) : []);
 
   const clickedRef = useRef(false);
   const hasToClickRef = useRef(false);
   const intervalRef = useRef(null);
 
-
-
   const startGame = () => {
     setPoints(0);
     setIsActive(true);
     newQuestion();
-    setTimer(GAME_DURATION);
-    intervalRef.current = setInterval(() => setTimer(timer => timer - TIME_INTERVAL), TIME_INTERVAL);
+    setTimerKey((prev) => prev + 1); // מרנדר את ה-Timer מחדש
+    // intervalRef.current = setInterval(() => setTimer(timer => timer - TIME_INTERVAL), TIME_INTERVAL);
     // setTimeout(stopGame, GAME_DURATION);
   };
 
@@ -98,13 +96,6 @@ export default function Game() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isActive]);
 
-  useEffect(() => {
-    if (timer <= 0 && isActive) {
-      stopGame();
-    }
-  }, [timer]);
-
-
   return (
     <div className="container">
   <header>
@@ -117,7 +108,7 @@ export default function Game() {
 
   {isActive && (
     <main className="game-area">
-      <Timer timer={timer} GAME_DURATION={GAME_DURATION} />
+      <Timer timerKey={timerKey} onFinish={stopGame} />
       <div className="boxes-container">
         {boxes.map((b, i) => (
           <Box key={i} shape={shapeClasses[b]} />
