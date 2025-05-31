@@ -1,12 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import "./Game.css";
+import "./css/Game.css";
 import Box from "./Box";
 import Timer from "./Timer";
 import Results from "./Results";
 const shapeClasses = ["square", "circle", "triangle"];
-const TIME_INTERVAL = 1000;
-const GAME_DURATION = 10000;
-
+import coinImage from './img/coin.png';
 const getRandomShapes = (allowDuplicates = true) => {
   if (allowDuplicates) {
     return Array.from({ length: 3 }, () =>
@@ -37,14 +35,19 @@ export default function Game() {
   const clickedRef = useRef(false);
   const hasToClickRef = useRef(false);
   const intervalRef = useRef(null);
+  const resultsRef = useRef(null);
+  useEffect(() => {
+    if (resultsRef.current) {
+      resultsRef.current.scrollLeft = resultsRef.current.scrollWidth;
+    }
+  }, [gameResults]);
 
   const startGame = () => {
     setPoints(0);
     setIsActive(true);
     newQuestion();
-    setTimerKey((prev) => prev + 1); // מרנדר את ה-Timer מחדש
-    // intervalRef.current = setInterval(() => setTimer(timer => timer - TIME_INTERVAL), TIME_INTERVAL);
-    // setTimeout(stopGame, GAME_DURATION);
+    setTimerKey((prev) => prev + 1);
+
   };
 
   const stopGame = () => {
@@ -77,7 +80,7 @@ export default function Game() {
       setPoints(prev => prev + 1);
     }
     else {
-      setPoints(prev => prev-1<0?0:prev - 1);
+      setPoints(prev => prev - 1 < 0 ? 0 : prev - 1);
     }
 
     newQuestion();
@@ -97,37 +100,41 @@ export default function Game() {
   }, [isActive]);
 
   return (
-    <div className="container">
-  <header>
-    <h1 className="title">תפוס את הצורה</h1>
-  </header>
-  
-  <div className="stats">
-    <p>נקודות: {points}</p>
-  </div>
+    <>
+      <div className="background-image"></div>
+      <div className="game-container">
+        <header>
+          <h1 className="title">תפוס את הצורה</h1>
+        </header>
+        <main className="game-area">
+          <div className="stats">
+            <p className="points"><img className="coin" src={coinImage} alt="coin" />נקודות: {points}</p>
+            <p className="game-text">הוראות: לחץ על "כן" אם הצורות שונות, ולחץ על "לא" אם הן זהות.</p>
+          </div>
 
-  {isActive && (
-    <main className="game-area">
-      <Timer timerKey={timerKey} onFinish={stopGame} />
-      <div className="boxes-container">
-        {boxes.map((b, i) => (
-          <Box key={i} shape={shapeClasses[b]} />
-        ))}
+          {isActive && (
+            <>
+              <Timer timerKey={timerKey} onFinish={stopGame} />
+              <div className="boxes-container">
+                {boxes.map((b, i) => (
+                  <Box key={i} shape={shapeClasses[b]} />
+                ))}
+              </div>
+              <div className="btns">
+                <button className="btn-catch" onClick={handleRightClick}>כן</button>
+                <button className="btn-catch" onClick={handleLeftClick}>לא</button>
+              </div>
+            </>
+          )}
+
+          {!isActive && (
+            <button className="btn-start" onClick={startGame}>התחל</button>
+          )}
+        </main>
+        <footer ref={resultsRef}>
+          <Results gameResults={gameResults} />
+        </footer>
       </div>
-      <div className="btns">
-        <button className="btn-catch" onClick={handleRightClick}>כן</button>
-        <button className="btn-catch" onClick={handleLeftClick}>לא</button>
-      </div>
-    </main>
-  )}
-
-  {!isActive && (
-    <button className="btn-start" onClick={startGame}>התחל</button>
-  )}
-
-
-  <Results gameResults={gameResults}/>
-</div>
-
+    </>
   );
 }

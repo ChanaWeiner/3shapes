@@ -1,0 +1,21 @@
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.timer-bar {
+  width: 50%;
+  height: 20px;
+  border: #F7AEF8 2px solid;
+  border-radius: 15px;
+  padding: 2px;
+}
+
+.timer-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, #72DDF7,#B388EB, #8093F1);
+  border-radius: 10px;
+}

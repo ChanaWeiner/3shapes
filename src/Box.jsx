@@ -1,13 +1,22 @@
-import "./Box.css";
-const shapeClasses = ["square", "circle", "triangle"];
+import './css/Box.css';
+import triangle from './img/triangle.svg';
+import square from './img/square.svg';
+import circle from './img/circle.svg';
+
+const shapeImages = {triangle,square,circle};
+
+const shapeClasses = Object.keys(shapeImages);
+
 export default function Box({ shape }) {
-  const confusingShape = shapeClasses.filter(s => s !== shape)[Math.floor(Math.random() * 2)];
+  const otherShapes = shapeClasses.filter(s => s !== shape);
+  const confusingShape = otherShapes[Math.floor(Math.random() * otherShapes.length)];
 
   return (
     <div className="box">
-      <div className={shape}>
-        <div className={`confusing-shape ${confusingShape}`}></div>
+      <div>
+        <img src={shapeImages[shape]} alt={shape} />
+        {/* <div className={`confusing-shape ${confusingShape}`}></div> */}
       </div>
     </div>
   );
-};
+}

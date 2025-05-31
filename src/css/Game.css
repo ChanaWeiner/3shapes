@@ -1,0 +1,102 @@
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+      font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.background-image {
+    position: fixed;
+    inset: 0;
+    background-image: url("../img/background.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.game-container {
+    color: #fff;
+    display: grid;
+    grid-template-rows: 100px auto 300px;
+    height: 100%;
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+    justify-self: center
+}
+
+.btn-catch,
+.btn-start,
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #000000;
+    font-weight: bold;
+}
+
+.btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    direction: rtl;
+}
+
+.boxes-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 16px;
+}
+
+.stats{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    direction: rtl;;
+}
+
+.points{
+    color: #000;
+  background-color: #72DDF7;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.coin{
+    width: 20px;
+}

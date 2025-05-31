@@ -1,0 +1,19 @@
+.results {
+    display: flex;
+    padding: 2px 5px;
+    border-top: 2px solid #ccc;
+    align-items: flex-end;
+    height: 200px;
+}
+
+.result-bar {
+    width: 20px;
+    margin-left: 4px;
+    background-color: #72DDF7;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s ease;
+}
+
+.btn-result {
+    margin-bottom: 30px;
+}
