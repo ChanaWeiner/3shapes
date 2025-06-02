@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "./css/Game.css";
-import Box from "./Box";
+import Board from "./Board";
 import Timer from "./Timer";
 import Results from "./Results";
 const shapeClasses = ["square", "circle", "triangle"];
@@ -35,12 +35,6 @@ export default function Game() {
   const clickedRef = useRef(false);
   const hasToClickRef = useRef(false);
   const intervalRef = useRef(null);
-  const resultsRef = useRef(null);
-  useEffect(() => {
-    if (resultsRef.current) {
-      resultsRef.current.scrollLeft = resultsRef.current.scrollWidth;
-    }
-  }, [gameResults]);
 
   const startGame = () => {
     setPoints(0);
@@ -53,7 +47,9 @@ export default function Game() {
   const stopGame = () => {
     clearInterval(intervalRef.current);
     setIsActive(false);
-    setGameResults(prevPoints => [...prevPoints, points]);
+    if (points > 0) {
+      setGameResults(prevPoints => [...prevPoints, points]);
+    }
     localStorage.setItem('gameResults', JSON.stringify([...gameResults, points]));
   };
 
@@ -106,32 +102,24 @@ export default function Game() {
         <header>
           <h1 className="title">תפוס את הצורה</h1>
         </header>
+
         <main className="game-area">
           <div className="stats">
             <p className="points"><img className="coin" src={coinImage} alt="coin" />נקודות: {points}</p>
             <p className="game-text">הוראות: לחץ על "כן" אם הצורות שונות, ולחץ על "לא" אם הן זהות.</p>
           </div>
 
-          {isActive && (
+          {isActive ? (
             <>
               <Timer timerKey={timerKey} onFinish={stopGame} />
-              <div className="boxes-container">
-                {boxes.map((b, i) => (
-                  <Box key={i} shape={shapeClasses[b]} />
-                ))}
-              </div>
-              <div className="btns">
-                <button className="btn-catch" onClick={handleRightClick}>כן</button>
-                <button className="btn-catch" onClick={handleLeftClick}>לא</button>
-              </div>
+              <Board boxes={boxes} shapeClasses={shapeClasses} handleRightClick={handleRightClick} handleLeftClick={handleLeftClick} />
             </>
-          )}
-
-          {!isActive && (
+          ) : (
             <button className="btn-start" onClick={startGame}>התחל</button>
           )}
         </main>
-        <footer ref={resultsRef}>
+
+        <footer>
           <Results gameResults={gameResults} />
         </footer>
       </div>

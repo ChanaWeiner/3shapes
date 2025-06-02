@@ -15,7 +15,6 @@ export default function Box({ shape }) {
     <div className="box">
       <div>
         <img src={shapeImages[shape]} alt={shape} />
-        {/* <div className={`confusing-shape ${confusingShape}`}></div> */}
       </div>
     </div>
   );

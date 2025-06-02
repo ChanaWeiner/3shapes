@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import "./css/Timer.css"; 
 const GAME_DURATION = 1000*10;
-const TIME_INTERVAL= 50; // 1 second
+const TIME_INTERVAL= 50;
+
 export default function Timer({ timerKey, onFinish }) {
     const [timer, setTimer] = useState(GAME_DURATION);
     const intervalRef = useRef(null);

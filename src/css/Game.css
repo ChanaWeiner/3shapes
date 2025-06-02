@@ -42,14 +42,9 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     align-self: flex-end;
     width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    padding: 10px;
-    box-sizing: border-box;
-    justify-self: center
+
 }
 
 .btn-catch,
